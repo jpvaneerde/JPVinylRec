@@ -1,0 +1,39 @@
+[package]
+name = "jpvinylrec"
+version = "0.1.0"
+edition = "2021"
+description = "Vinyl side recording -> speed-corrected, split and tagged FLAC tracks"
+
+[lib]
+name = "jpvinylrec"
+path = "src/lib.rs"
+
+[[bin]]
+name = "jpvinylrec"
+path = "src/main.rs"
+
+[dependencies]
+anyhow = "1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+rayon = "1"
+rustfft = "6"
+symphonia = { version = "0.5", features = ["all"] }
+flacenc = "0.4"
+metaflac = "0.2"
+ureq = { version = "2", features = ["json"] }
+eframe = { version = "0.31", default-features = false, features = ["default_fonts", "glow", "persistence", "wayland", "x11"] }
+rfd = "0.15"
+rodio = { version = "0.20", default-features = false }
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+
+# The DSP code is painfully slow without optimisation, so optimise it in dev builds too.
+[profile.dev]
+opt-level = 2
+
+[profile.test]
+opt-level = 3
